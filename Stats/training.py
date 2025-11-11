@@ -36,6 +36,14 @@ class CodeDataset(Dataset):
         return item
 
 
+def compute_metrics(eval_pred):
+    logits, labels = eval_pred
+    preds = logits.argmax(axis=-1)
+    macro_f1 = f1_score(labels, preds, average="macro")
+    acc = accuracy_score(labels, preds)
+    return {"macro_f1": macro_f1, "accuracy": acc}
+
+
 def main():
     train_path = "task_a_trial.parquet"
     val_path = "task_a_validation_set.parquet"
@@ -45,7 +53,7 @@ def main():
     val_df = pd.read_parquet(val_path)
     test_df = pd.read_parquet(test_path)
 
-    train_df = train_df.head(2000)
+    train_df = train_df.head(1000)
     val_df = val_df.head(500)
     test_df = test_df.head(50)
 
@@ -77,14 +85,6 @@ def main():
         weight_decay=0.01,
         logging_steps=50
     )
-
-
-    def compute_metrics(eval_pred):
-        logits, labels = eval_pred
-        preds = logits.argmax(axis=-1)
-        macro_f1 = f1_score(labels, preds, average="macro")
-        acc = accuracy_score(labels, preds)
-        return {"macro_f1": macro_f1, "accuracy": acc}
 
     trainer = Trainer(
         model=model,
