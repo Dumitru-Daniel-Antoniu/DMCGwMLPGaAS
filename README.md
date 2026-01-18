@@ -1,3 +1,5 @@
 # DMCGwMLPGaAS
 
-Kaggle training data script: https://www.kaggle.com/code/danielantoniudumitru/semeval-task13-partb?scriptVersionId=281592866
+- Kaggle training on UniXCoder: https://www.kaggle.com/code/danielantoniudumitru/semeval-task13-b-unixcoder
+- Kaggle training on codeT5: https://www.kaggle.com/code/danielantoniudumitru/semeval-task13-b-codet5
+- Kaggle training on codeBERT: https://www.kaggle.com/code/danielantoniudumitru/semeval-task13-b-codebert
