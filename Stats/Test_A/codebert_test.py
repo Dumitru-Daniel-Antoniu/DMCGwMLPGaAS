@@ -6,14 +6,14 @@ from transformers import (
     AutoModelForSequenceClassification,
     Trainer,
 )
-from codet5_training import CodeDataset, compute_metrics
+from codebert_training import CodeDataset, compute_metrics
 
 
 def main():
-    model_dir = "./codet5-finetuned"
-    test_path = "task_a_test_set_sample.parquet"
+    model_dir = "./codebert-finetuned"
+    test_path = "../task_a_test_set_sample.parquet"
 
-    # Safety checks
+    # Check paths
     if not os.path.exists(model_dir):
         raise FileNotFoundError(f"Model directory not found: {model_dir}")
     if not os.path.exists(test_path):
@@ -23,30 +23,30 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained(model_dir)
     model = AutoModelForSequenceClassification.from_pretrained(model_dir)
 
-    # Device selection: CUDA → MPS (Apple) → CPU
+    # Device selection: CUDA → MPS (Apple Silicon) → CPU
     if torch.cuda.is_available():
         device = "cuda"
     elif torch.backends.mps.is_available():
         device = "mps"
     else:
         device = "cpu"
+
     model.to(device)
     print(f"Using device: {device}")
 
     # Load test data
     test_df = pd.read_parquet(test_path)
-    # For quick debugging you can limit:
-    # test_df = test_df.head(50)
+    # Optional: test_df = test_df.head(50)
 
     test_dataset = CodeDataset(test_df, tokenizer)
 
-    # Trainer only for evaluation
     trainer = Trainer(
         model=model,
         tokenizer=tokenizer,
         compute_metrics=compute_metrics,
     )
 
+    # Evaluate
     metrics = trainer.evaluate(eval_dataset=test_dataset)
 
     print("\n===== Test Metrics =====")

@@ -51,9 +51,9 @@ def compute_metrics(eval_pred):
 
 
 def main():
-    train_path = "task_a_trial.parquet"
-    val_path = "task_a_validation_set.parquet"
-    test_path = "task_a_test_set_sample.parquet"
+    train_path = "../task_a_trial.parquet"
+    val_path = "../task_a_validation_set.parquet"
+    test_path = "../task_a_test_set_sample.parquet"
 
     train_df = pd.read_parquet(train_path)
     val_df = pd.read_parquet(val_path)
